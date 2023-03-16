@@ -4,11 +4,19 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
+const StatisticLine = ({ text, votes }) => {
+  return (
+    <div>
+      {text} {votes}
+    </div>
+  );
+};
+
 const Statistics = ({ goodVotes, neutralVotes, badVotes }) => {
   let totalVotes = goodVotes + neutralVotes + badVotes;
   let averageVotes =
     (goodVotes * 1 + neutralVotes * 0 + badVotes * -1) / totalVotes;
-  let positiveVotes = (goodVotes / totalVotes) * 100;
+  let positiveVotes = (goodVotes / totalVotes) * 100 + "%";
 
   if (totalVotes === 0) {
     return <div>No feedback given</div>;
@@ -16,12 +24,12 @@ const Statistics = ({ goodVotes, neutralVotes, badVotes }) => {
 
   return (
     <div>
-      <div>good {goodVotes}</div>
-      <div>neutral {neutralVotes}</div>
-      <div>bad {badVotes}</div>
-      <div>all {totalVotes}</div>
-      <div>average {averageVotes}</div>
-      <div>positive {positiveVotes}%</div>
+      <StatisticLine text="good" votes={goodVotes}></StatisticLine>
+      <StatisticLine text="neutral" votes={neutralVotes}></StatisticLine>
+      <StatisticLine text="bad" votes={badVotes}></StatisticLine>
+      <StatisticLine text="all" votes={totalVotes}></StatisticLine>
+      <StatisticLine text="average" votes={averageVotes}></StatisticLine>
+      <StatisticLine text="positive" votes={positiveVotes}></StatisticLine>
     </div>
   );
 };
