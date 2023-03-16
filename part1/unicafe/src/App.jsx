@@ -10,6 +10,10 @@ const Statistics = ({ goodVotes, neutralVotes, badVotes }) => {
     (goodVotes * 1 + neutralVotes * 0 + badVotes * -1) / totalVotes;
   let positiveVotes = (goodVotes / totalVotes) * 100;
 
+  if (totalVotes === 0) {
+    return <div>No feedback given</div>;
+  }
+
   return (
     <div>
       <div>good {goodVotes}</div>
