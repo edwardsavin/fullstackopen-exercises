@@ -5,17 +5,25 @@ const Button = ({ handleClick, text }) => {
 };
 
 const Statistics = ({ goodVotes, neutralVotes, badVotes }) => {
+  let totalVotes = goodVotes + neutralVotes + badVotes;
+  let averageVotes =
+    (goodVotes * 1 + neutralVotes * 0 + badVotes * -1) / totalVotes;
+  let positiveVotes = (goodVotes / totalVotes) * 100;
+
   return (
     <div>
       <div>good {goodVotes}</div>
       <div>neutral {neutralVotes}</div>
       <div>bad {badVotes}</div>
+      <div>all {totalVotes}</div>
+      <div>average {averageVotes}</div>
+      <div>positive {positiveVotes}%</div>
     </div>
   );
 };
 
 const App = () => {
-  // save clicks of each button to its own state
+  // Save clicks of each button to its own state
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
