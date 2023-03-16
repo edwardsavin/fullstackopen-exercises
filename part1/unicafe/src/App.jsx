@@ -6,9 +6,10 @@ const Button = ({ handleClick, text }) => {
 
 const StatisticLine = ({ text, votes }) => {
   return (
-    <div>
-      {text} {votes}
-    </div>
+    <tr>
+      <td>{text}</td>
+      <td>{votes}</td>
+    </tr>
   );
 };
 
@@ -23,14 +24,16 @@ const Statistics = ({ goodVotes, neutralVotes, badVotes }) => {
   }
 
   return (
-    <div>
-      <StatisticLine text="good" votes={goodVotes}></StatisticLine>
-      <StatisticLine text="neutral" votes={neutralVotes}></StatisticLine>
-      <StatisticLine text="bad" votes={badVotes}></StatisticLine>
-      <StatisticLine text="all" votes={totalVotes}></StatisticLine>
-      <StatisticLine text="average" votes={averageVotes}></StatisticLine>
-      <StatisticLine text="positive" votes={positiveVotes}></StatisticLine>
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text="good" votes={goodVotes}></StatisticLine>
+        <StatisticLine text="neutral" votes={neutralVotes}></StatisticLine>
+        <StatisticLine text="bad" votes={badVotes}></StatisticLine>
+        <StatisticLine text="all" votes={totalVotes}></StatisticLine>
+        <StatisticLine text="average" votes={averageVotes}></StatisticLine>
+        <StatisticLine text="positive" votes={positiveVotes}></StatisticLine>
+      </tbody>
+    </table>
   );
 };
 
