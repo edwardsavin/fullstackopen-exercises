@@ -1,3 +1,7 @@
-const Person = ({ name }) => <li>{name}</li>;
+const Person = ({ name, phoneNumber }) => (
+  <li>
+    {name} {phoneNumber}
+  </li>
+);
 
 export default Person;
