@@ -8,6 +8,12 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
+    if (persons.find((person) => person.name === newName)) {
+      alert(`${newName} is already added to the phonebook`);
+      setNewName("");
+      return;
+    }
+
     const personObject = {
       name: newName,
     };
@@ -37,7 +43,6 @@ const App = () => {
           <Person key={person.name} name={person.name} />
         ))}
       </ul>
-      <div>debug: {newName}</div>
     </div>
   );
 };
