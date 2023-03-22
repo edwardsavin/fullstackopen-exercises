@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/AllPersons";
-import axios from "axios";
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,9 +11,7 @@ const App = () => {
   const [filtered, setFiltered] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    });
+    personService.getAll().then((initialNames) => setPersons(initialNames));
   }, []);
 
   const addPerson = (event) => {
@@ -31,13 +29,11 @@ const App = () => {
       id: persons.length + 1,
     };
 
-    axios
-      .post("http://localhost:3001/persons", personObject)
-      .then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-      });
+    personService.create(personObject).then((returnedName) => {
+      setPersons(persons.concat(returnedName));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleNameChange = (event) => {
@@ -56,6 +52,17 @@ const App = () => {
     return person.name.toLowerCase().includes(filtered.toLowerCase());
   });
 
+  const handleDeletePerson = (id) => {
+    const person = persons.find((p) => p.id === id);
+    const result = window.confirm(`Delete ${person.name}?`);
+
+    if (result) {
+      personService.deletePerson(id).then(() => {
+        setPersons(persons.filter((p) => p.id !== id));
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -69,7 +76,10 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons filteredNames={filteredNames} />
+      <Persons
+        filteredNames={filteredNames}
+        handleDeletePerson={handleDeletePerson}
+      />
     </div>
   );
 };

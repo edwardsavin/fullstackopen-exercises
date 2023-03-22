@@ -1,6 +1,6 @@
 import Person from "./Person";
 
-const Persons = ({ filteredNames }) => {
+const Persons = ({ filteredNames, handleDeletePerson }) => {
   return (
     <ul>
       {filteredNames.map((person) => (
@@ -8,6 +8,7 @@ const Persons = ({ filteredNames }) => {
           key={person.id}
           name={person.name}
           phoneNumber={person.phoneNumber}
+          toggleDelete={() => handleDeletePerson(person.id)}
         />
       ))}
     </ul>
