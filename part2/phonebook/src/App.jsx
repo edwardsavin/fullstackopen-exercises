@@ -14,20 +14,35 @@ const App = () => {
     personService.getAll().then((initialNames) => setPersons(initialNames));
   }, []);
 
+  const personObject = {
+    name: newName,
+    phoneNumber: newNumber,
+    id: persons.length + 1,
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
+    const person = persons.find((p) => p.name === newName);
 
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
-      setNewName("");
+    if (person) {
+      const result = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      );
+
+      if (result) {
+        personService.update(person.id, personObject).then((returnedPerson) => {
+          setPersons(
+            persons.map((p) => (p.id !== person.id ? p : returnedPerson))
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+
+        return;
+      }
+
       return;
     }
-
-    const personObject = {
-      name: newName,
-      phoneNumber: newNumber,
-      id: persons.length + 1,
-    };
 
     personService.create(personObject).then((returnedName) => {
       setPersons(persons.concat(returnedName));
