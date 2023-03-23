@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filtered, setFiltered] = useState("");
   const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState("default");
 
   useEffect(() => {
     personService.getAll().then((initialNames) => setPersons(initialNames));
@@ -32,13 +33,26 @@ const App = () => {
       );
 
       if (result) {
-        personService.update(person.id, personObject).then((returnedPerson) => {
-          setPersons(
-            persons.map((p) => (p.id !== person.id ? p : returnedPerson))
-          );
-          setNewName("");
-          setNewNumber("");
-        });
+        personService
+          .update(person.id, personObject)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((p) => (p.id !== person.id ? p : returnedPerson))
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch(() => {
+            setNotificationMessage(
+              `Information of ${person.name} has already been removed from server`
+            );
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 5000);
+            setNotificationType("error");
+
+            setPersons(persons.filter((p) => p.id !== person.id));
+          });
 
         return;
       }
@@ -53,6 +67,7 @@ const App = () => {
       setTimeout(() => {
         setNotificationMessage(null);
       }, 5000);
+      setNotificationType("info");
 
       setNewName("");
       setNewNumber("");
@@ -89,7 +104,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification
+        message={notificationMessage}
+        notificationType={notificationType}
+      />
       <Filter value={filtered} onChange={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm

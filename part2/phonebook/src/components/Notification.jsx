@@ -1,5 +1,5 @@
-const Notification = ({ message }) => {
-  const notificationStyle = {
+const Notification = ({ message, notificationType }) => {
+  let defaultStyle = {
     color: "green",
     background: "lightgray",
     fontSize: 20,
@@ -9,12 +9,20 @@ const Notification = ({ message }) => {
     marginBottom: "10px",
   };
 
+  if (notificationType === "error") {
+    defaultStyle = {
+      ...defaultStyle,
+      color: "red",
+    };
+  } else {
+    defaultStyle = defaultStyle;
+  }
+
   if (message === null) {
     return null;
   }
-
   return (
-    <div style={notificationStyle} className="error">
+    <div style={defaultStyle} className={notificationType}>
       {message}
     </div>
   );
