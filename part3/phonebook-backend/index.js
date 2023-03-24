@@ -4,7 +4,21 @@ const morgan = require("morgan");
 const app = express();
 
 app.use(express.json());
-app.use(morgan("tiny"));
+
+const getMorgan = morgan("tiny");
+const postMorgan = morgan(
+  ":method :url :status :res[content-length] - :response-time ms :json"
+);
+
+app.use((request, response, next) => {
+  if (request.method === "GET") {
+    getMorgan(request, response, next);
+  } else if (request.method === "POST") {
+    postMorgan(request, response, next);
+  } else {
+    next();
+  }
+});
 
 let persons = [
   {
@@ -95,6 +109,13 @@ app.post("/api/persons", (request, response) => {
     name: body.name,
     number: body.number,
   };
+
+  morgan.token("json", (request, response) => {
+    return JSON.stringify({
+      name: body.name,
+      number: body.number,
+    });
+  });
 
   persons = persons.concat(person);
 
