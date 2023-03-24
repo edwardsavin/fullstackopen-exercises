@@ -2,7 +2,7 @@ const { request, response } = require("express");
 const express = require("express");
 const app = express();
 
-let people = [
+let persons = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -30,21 +30,32 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(people);
+  response.json(persons);
 });
 
 app.get("/info", (request, response) => {
-  const peopleNumber = people.length;
+  const personsNumber = persons.length;
   const now = new Date();
 
   const infoDiv = `
     <div>
-      <p>Phonebook has info for ${peopleNumber} people</p>
+      <p>Phonebook has info for ${personsNumber} persons</p>
       <p>${now}</p>
     </div>
   `;
 
   response.send(infoDiv);
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const person = persons.find((person) => person.id === id);
+
+  if (person) {
+    response.json(person);
+  } else {
+    response.status(404).send("This person does not exist");
+  }
 });
 
 const PORT = 3001;
